@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
-import User from '../modals/userModal';
-import generateToken from '../utils/generateToken';
+import User from '../modals/userModal.js';
+import generateToken from '../utils/generateToken.js';
 
 
 //Register Business logic
@@ -62,7 +62,7 @@ export const login = async (req, res) => {
             })
         }
 
-        const isPasswordMatch = bcrypt.compare(password, user.password)
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
             return res.status(400).json({
                 success: false,
@@ -70,7 +70,7 @@ export const login = async (req, res) => {
             })
         }
 
-        generateToken(req, res, `Weclome to ${user.email}`);
+        generateToken(user, res, `Welcome to ${user.email}`);
     } catch (error) {
         console.log(error.message, 'error');
         return res.status(500).json({
